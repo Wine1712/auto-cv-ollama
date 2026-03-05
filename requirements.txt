@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+streamlit
+requests
+bcrypt
+PyJWT
+pydantic
+python-docx
+reportlab
