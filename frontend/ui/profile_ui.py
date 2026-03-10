@@ -69,7 +69,13 @@ def _set_if_missing(key: str, value):
 
 
 def _clear_project_keys(idx: int):
-    for k in [f"project_name_{idx}", f"project_desc_{idx}", f"project_tech_{idx}"]:
+    for k in [
+        f"project_name_{idx}",
+        f"project_desc_{idx}",
+        f"project_tech_{idx}",
+        f"project_start_{idx}",
+        f"project_end_{idx}",
+    ]:
         st.session_state.pop(k, None)
 
 
@@ -84,12 +90,12 @@ def _clear_education_keys(idx: int):
 
 
 def _clear_cert_keys(idx: int):
-    for k in [f"cert_name_{idx}", f"cert_org_{idx}"]:
+    for k in [f"cert_name_{idx}", f"cert_org_{idx}", f"cert_start_{idx}", f"cert_end_{idx}"]:
         st.session_state.pop(k, None)
 
 
 def _clear_intern_keys(idx: int):
-    for k in [f"intern_role_{idx}", f"intern_company_{idx}"]:
+    for k in [f"intern_role_{idx}", f"intern_company_{idx}", f"intern_start_{idx}", f"intern_end_{idx}"]:
         st.session_state.pop(k, None)
 
 
@@ -149,6 +155,8 @@ def _load_profile_once(token: str):
         _set_if_missing(f"project_name_{i}", item.get("name", ""))
         _set_if_missing(f"project_desc_{i}", item.get("description", ""))
         _set_if_missing(f"project_tech_{i}", item.get("tech", ""))
+        _set_if_missing(f"project_start_{i}", item.get("start", ""))
+        _set_if_missing(f"project_end_{i}", item.get("end", ""))
 
     for i, item in enumerate(loaded_experience):
         item = _safe_dict(item)
@@ -170,10 +178,44 @@ def _load_profile_once(token: str):
         _set_if_missing(f"cert_name_{i}", item.get("name", "") or item.get("title", ""))
         _set_if_missing(f"cert_org_{i}", item.get("issuer", ""))
 
+        cert_start = item.get("start", "")
+        cert_end = item.get("end", "")
+
+        if not cert_start and not cert_end and item.get("dates"):
+            raw_dates = str(item.get("dates") or "")
+            if "–" in raw_dates:
+                parts = [p.strip() for p in raw_dates.split("–", 1)]
+                cert_start = parts[0] if len(parts) > 0 else ""
+                cert_end = parts[1] if len(parts) > 1 else ""
+            elif "-" in raw_dates:
+                parts = [p.strip() for p in raw_dates.split("-", 1)]
+                cert_start = parts[0] if len(parts) > 0 else ""
+                cert_end = parts[1] if len(parts) > 1 else ""
+
+        _set_if_missing(f"cert_start_{i}", cert_start)
+        _set_if_missing(f"cert_end_{i}", cert_end)
+
     for i, item in enumerate(loaded_internships):
         item = _safe_dict(item)
         _set_if_missing(f"intern_role_{i}", item.get("role", ""))
         _set_if_missing(f"intern_company_{i}", item.get("company", ""))
+
+        intern_start = item.get("start", "")
+        intern_end = item.get("end", "")
+
+        if not intern_start and not intern_end and item.get("dates"):
+            raw_dates = str(item.get("dates") or "")
+            if "–" in raw_dates:
+                parts = [p.strip() for p in raw_dates.split("–", 1)]
+                intern_start = parts[0] if len(parts) > 0 else ""
+                intern_end = parts[1] if len(parts) > 1 else ""
+            elif "-" in raw_dates:
+                parts = [p.strip() for p in raw_dates.split("-", 1)]
+                intern_start = parts[0] if len(parts) > 0 else ""
+                intern_end = parts[1] if len(parts) > 1 else ""
+
+        _set_if_missing(f"intern_start_{i}", intern_start)
+        _set_if_missing(f"intern_end_{i}", intern_end)
 
     st.session_state.profile_loaded_once = True
 def _clear_profile_form_keys():
@@ -275,12 +317,22 @@ def page_profile():
     for i in range(st.session_state.proj_count):
         st.markdown(f"**Project {i+1}**")
         project_name = st.text_input("Project Name", key=f"project_name_{i}")
+
+        col_a, col_b = st.columns(2)
+        with col_a:
+            project_start = st.text_input("Start Date", key=f"project_start_{i}")
+        with col_b:
+            project_end = st.text_input("End Date", key=f"project_end_{i}")
+
         project_desc = st.text_area("Project Description", key=f"project_desc_{i}", height=110)
         project_tech = st.text_input("Technologies Used", key=f"project_tech_{i}")
 
         projects.append(
             {
                 "name": project_name,
+                "start": project_start,
+                "end": project_end,
+                "dates": f"{project_start} – {project_end}".strip(" –"),
                 "description": project_desc,
                 "tech": project_tech,
             }
@@ -388,10 +440,20 @@ def page_profile():
         cert_name = st.text_input("Certification Name", key=f"cert_name_{i}")
         cert_org = st.text_input("Issuer", key=f"cert_org_{i}")
 
+        col_a, col_b = st.columns(2)
+        with col_a:
+            cert_start = st.text_input("Start Date", key=f"cert_start_{i}")
+        with col_b:
+            cert_end = st.text_input("End Date", key=f"cert_end_{i}")
+
         certifications.append(
             {
                 "name": cert_name,
+                "title": cert_name,
                 "issuer": cert_org,
+                "start": cert_start,
+                "end": cert_end,
+                "dates": f"{cert_start} – {cert_end}".strip(" –"),
             }
         )
         st.divider()
@@ -418,10 +480,19 @@ def page_profile():
         intern_role = st.text_input("Internship Role", key=f"intern_role_{i}")
         intern_company = st.text_input("Internship Company", key=f"intern_company_{i}")
 
+        col_a, col_b = st.columns(2)
+        with col_a:
+            intern_start = st.text_input("Start Date", key=f"intern_start_{i}")
+        with col_b:
+            intern_end = st.text_input("End Date", key=f"intern_end_{i}")
+
         internships.append(
             {
                 "role": intern_role,
                 "company": intern_company,
+                "start": intern_start,
+                "end": intern_end,
+                "dates": f"{intern_start} – {intern_end}".strip(" –"),
             }
         )
         st.divider()

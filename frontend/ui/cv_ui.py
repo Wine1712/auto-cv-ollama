@@ -702,8 +702,24 @@ def page_cv():
             with c1:
                 name = st.text_input("Project Name", value=pr.get("name", ""), key=f"proj_name_{i}")
                 tech = st.text_input("Tech", value=pr.get("tech", ""), key=f"proj_tech_{i}")
+
             with c2:
-                dates = st.text_input("Dates", value=pr.get("dates", ""), key=f"proj_dates_{i}")
+                start_val = pr.get("start", "")
+                end_val = pr.get("end", "")
+
+                if not start_val and not end_val and pr.get("dates"):
+                    raw_dates = str(pr.get("dates") or "")
+                    if "–" in raw_dates:
+                        parts = [p.strip() for p in raw_dates.split("–", 1)]
+                        start_val = parts[0] if len(parts) > 0 else ""
+                        end_val = parts[1] if len(parts) > 1 else ""
+                    elif "-" in raw_dates:
+                        parts = [p.strip() for p in raw_dates.split("-", 1)]
+                        start_val = parts[0] if len(parts) > 0 else ""
+                        end_val = parts[1] if len(parts) > 1 else ""
+
+                project_start = st.text_input("Start Date", value=start_val, key=f"proj_start_{i}")
+                project_end = st.text_input("End Date", value=end_val, key=f"proj_end_{i}")
 
             bullets = st.text_area(
                 "Bullets (one per line)",
@@ -716,7 +732,9 @@ def page_cv():
                 {
                     "name": name,
                     "tech": tech,
-                    "dates": dates,
+                    "start": project_start,
+                    "end": project_end,
+                    "dates": f"{project_start} – {project_end}".strip(" –"),
                     "bullets": _split_lines(bullets),
                 }
             )

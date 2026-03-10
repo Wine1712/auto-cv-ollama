@@ -58,38 +58,102 @@ def generate_targeted_cv(inp: GenerateInputs) -> Dict[str, Any]:
 
     header = _resolve_header(profile, fallback_email=None)
 
-    prompt = _build_prompt(
+    # Select only the most relevant records first
+    sel_exp = _top_k_by_overlap(experiences, jd, 3)
+    sel_proj = _top_k_by_overlap(projects, jd, 3)
+
+    # Generate section by section
+    summary = _generate_summary(
         profile=profile,
         header=header,
         jd=jd,
         company=inp.company,
         job_title=inp.job_title,
+        selected_experience=sel_exp,
+        selected_projects=sel_proj,
+        model=inp.model,
     )
 
-    text = ollama_generate(model=inp.model, prompt=prompt, timeout=240)
-    cv = _parse_json_from_text(text)
+    generated_education = _generate_education(
+        education=education,
+        jd=jd,
+        company=inp.company,
+        job_title=inp.job_title,
+        model=inp.model,
+    )
 
-    if not isinstance(cv, dict):
-        sel_exp = _top_k_by_overlap(experiences, jd, 3)
-        sel_proj = _top_k_by_overlap(projects, jd, 3)
-        cv = _fallback_cv(
-            header=header,
-            profile=profile,
-            sel_exp=sel_exp,
-            sel_proj=sel_proj,
-            education=education,
-            internships=internships,
-            certs=certifications,
-        )
+    generated_certifications = _generate_certifications(
+        certifications=certifications,
+        jd=jd,
+        company=inp.company,
+        job_title=inp.job_title,
+        model=inp.model,
+    )
 
-    # Tight ATS-friendly normalization
-    cv["summary"] = _truncate_words(str(cv.get("summary") or "").strip(), 80)
+    generated_internships = _generate_internships(
+        internships=internships,
+        jd=jd,
+        company=inp.company,
+        job_title=inp.job_title,
+        model=inp.model,
+    )
 
-    cv["areas_of_expertise"] = _coerce_text_list(cv.get("areas_of_expertise"), max_items=5)
+    areas_of_expertise = _generate_expertise(
+        profile=profile,
+        jd=jd,
+        company=inp.company,
+        job_title=inp.job_title,
+        selected_experience=sel_exp,
+        selected_projects=sel_proj,
+        model=inp.model,
+    )
 
+    skills = _generate_skills(
+        profile=profile,
+        jd=jd,
+        company=inp.company,
+        job_title=inp.job_title,
+        model=inp.model,
+    )
+
+    generated_experience = _generate_experience(
+        selected_experience=sel_exp,
+        jd=jd,
+        company=inp.company,
+        job_title=inp.job_title,
+        model=inp.model,
+    )
+
+    generated_projects = _generate_projects(
+        selected_projects=sel_proj,
+        jd=jd,
+        company=inp.company,
+        job_title=inp.job_title,
+        model=inp.model,
+    )
+
+    # Final assembled CV
+    cv = {
+        "header": header,
+        "summary": summary,
+        "areas_of_expertise": areas_of_expertise,
+        "skills": skills,
+        "experience": generated_experience,
+        "projects": generated_projects,
+        "education": generated_education,
+        "certifications": generated_certifications,
+        "internships": generated_internships,
+    }
+
+    # Final normalization / safeguards
+    cv["summary"] = _truncate_words(str(cv.get("summary") or "").strip(), 90)
+
+    cv["areas_of_expertise"] = _coerce_text_list(
+        cv.get("areas_of_expertise"),
+        max_items=5,
+    )
     if not cv["areas_of_expertise"]:
         cv["areas_of_expertise"] = _fallback_expertise_from_profile(profile)[:5]
-
 
     cv["skills"] = _coerce_skills(cv.get("skills"))
     cv["experience"] = _normalize_experience_list(_as_list_of_dicts(cv.get("experience")))[:3]
@@ -104,145 +168,354 @@ def generate_targeted_cv(inp: GenerateInputs) -> Dict[str, Any]:
 
     return cv
 
+def _generate_summary(
+    *,
+    profile: Dict[str, Any],
+    header: Dict[str, Any],
+    jd: str,
+    company: str,
+    job_title: str,
+    selected_experience: List[Dict[str, Any]],
+    selected_projects: List[Dict[str, Any]],
+    model: str,
+) -> str:
+    prompt = f"""
+You are an expert ATS resume writer.
 
-def _build_prompt(*, profile: Dict[str, Any], header: Dict[str, Any], jd: str, company: str, job_title: str) -> str:
-    return f"""
-You are an expert ATS resume writer for consulting, AI, data, and technology roles.
+Task:
+Write only the professional summary section for a CV.
 
-RETURN ONLY VALID JSON.
-No markdown fences.
-No commentary.
-No explanation text.
+Strict rules:
+- Return plain text only.
+- Do not return JSON.
+- Do not return headings.
+- Do not return bullet points.
+- Do not return commentary or explanation.
+- Keep it to 3-4 lines.
+- Keep it concise, modern, ATS-friendly, and recruiter-friendly.
+- Highlight the candidate's strongest and most relevant achievements.
+- Include measurable impact only if clearly supported by the profile.
+- Include important technical keywords from the job description only when supported by the profile.
+- Avoid generic HR phrases such as "hardworking", "team player", "results-driven professional", or "seeking an opportunity".
+- Focus on the target role, strongest relevant experience, technical depth, and business value.
+- Use only true evidence from the profile.
+- Do not invent achievements, tools, metrics, domains, or responsibilities.
 
-HARD RULES:
-- The CV must be concise and intended to fit within about 2 pages.
-- Use ONLY evidence from the user's master profile.
-- Use the job description only to decide relevance, wording emphasis, and prioritization.
-- Do NOT invent employers, projects, dates, certifications, degrees, responsibilities, metrics, tools, locations, achievements, or titles.
-- Keep dates only from the master profile.
-- Select ONLY 2 or 3 most relevant experiences from the master profile.
-- Select ONLY 2 or 3 most relevant projects from the master profile.
-- Use STAR-style bullet points where possible, but only from true profile evidence.
-- IMPORTANT info may use **double-asterisks** in summary and bullets, but only where useful and not excessively.
+TARGET JOB:
+Company: {company}
+Title: {job_title}
+Description:
+{jd}
 
-SUMMARY RULES:
-Write a professional summary for the target role using the candidate's real background only.
+HEADER:
+{json.dumps(header, ensure_ascii=False)}
 
-Requirements:
-- Keep it to 3–4 lines only.
-- Make it ATS-friendly and recruiter-attractive.
-- Align it closely with the key priorities from the job description.
-- Highlight leadership, measurable impact, domain relevance, and business value where supported by the master profile.
-- Include industry-specific keywords, tools, and technologies from the job description when they are truly supported by the profile.
-- Emphasize 3 or 4 strongest relevant capabilities, achievements, or strengths from the profile.
-- Do NOT invent achievements, metrics, tools, certifications, or experience.
-- Keep wording concise, confident, and tailored to the target role.
+SELECTED EXPERIENCE:
+{json.dumps(selected_experience, ensure_ascii=False)}
 
-AREAS OF EXPERTISE RULES:
-- "areas_of_expertise" MUST contain no more than 5 items.
-- Choose only the strongest areas relevant to the target job.
+SELECTED PROJECTS:
+{json.dumps(selected_projects, ensure_ascii=False)}
+
+MASTER PROFILE:
+{json.dumps(profile, ensure_ascii=False)}
+""".strip()
+
+    text = ollama_generate(model=model, prompt=prompt, timeout=180)
+    summary = _parse_text_response(text)
+
+    if not summary:
+        fallback_title = str(header.get("title") or job_title or "AI-focused candidate").strip()
+        return (
+            f"{fallback_title} with hands-on experience in machine learning, automation, "
+            f"and data-driven solution development. Brings relevant project and technical "
+            f"experience aligned to the target role, with strengths in applied AI, data processing, "
+            f"and practical business-focused delivery."
+        )
+
+    return summary
+
+def _generate_expertise(
+    *,
+    profile: Dict[str, Any],
+    jd: str,
+    company: str,
+    job_title: str,
+    selected_experience: List[Dict[str, Any]],
+    selected_projects: List[Dict[str, Any]],
+    model: str,
+) -> List[str]:
+    prompt = f"""
+You are an expert ATS resume writer.
+
+Return ONLY a valid JSON array.
+
+Task:
+Select the 3 to 5 strongest areas of expertise for this candidate based on the target job.
+
+Rules:
+- Return only a JSON list.
+- No explanation.
+- No markdown.
+- No text before or after the JSON.
+- Each item must be short, ATS-friendly, and job-relevant.
 - Use only evidence from the master profile.
-- Keep each item short and ATS-friendly.
+- Do not invent skills, tools, or domains.
+- Prioritize the strongest areas most relevant to the target role.
 
-SKILLS RULES:
-- Skills MUST be grouped into EXACT categories:
-  1) Programming and Data
-  2) Machine Learning and AI
-  3) Data Engineering and Cloud
-  4) Data Processing
-  5) Automation
-  6) Tools and Libraries
-  7) Soft Skills
-  8) Domain Strengths
+Example:
+["Machine Learning", "Data Pipelines", "LLM Applications", "Automation", "Compliance Monitoring"]
 
-EXPERIENCE BULLETS RULES:
-- For each selected experience, write 2 to 4 bullet points only.
-- Keep each bullet under 20 words.
-- Start each bullet with a strong action verb.
-- Focus on achievements, contributions, and business impact rather than generic responsibilities.
-- Include measurable impact where supported by the master profile, such as %, scale, time saved, productivity improvement, accuracy improvement, or delivery outcomes.
-- Include at least one important keyword, responsibility, tool, or domain point from the job description where relevant.
-- Do NOT invent numbers, metrics, achievements, responsibilities, or tools.
-- Avoid weak phrases like "helped with", "worked on", or "responsible for" unless absolutely necessary.
+TARGET JOB:
+Company: {company}
+Title: {job_title}
+Description:
+{jd}
 
-EXPERIENCE BULLETS RULES:
-- For each selected experience, write 2 to 4 bullet points only.
-- Keep each bullet under 20 words.
-- Start each bullet with a strong action verb.
-- Focus on achievements, contributions, and business impact rather than generic responsibilities.
-- Include measurable impact where supported by the master profile, such as %, scale, time saved, productivity improvement, accuracy improvement, or delivery outcomes.
-- Include at least one important keyword, responsibility, tool, or domain point from the job description where relevant.
-- Do NOT invent numbers, metrics, achievements, responsibilities, or tools.
-- Avoid weak phrases like "helped with", "worked on", or "responsible for" unless absolutely necessary.
+SELECTED EXPERIENCE:
+{json.dumps(selected_experience, ensure_ascii=False)}
 
-OUTPUT JSON SCHEMA:
-{{
-  "header": {{
-    "name": "...",
+SELECTED PROJECTS:
+{json.dumps(selected_projects, ensure_ascii=False)}
+
+MASTER PROFILE:
+{json.dumps(profile, ensure_ascii=False)}
+""".strip()
+
+    text = ollama_generate(model=model, prompt=prompt, timeout=180)
+    items = _parse_json_list_from_text(text)
+    items = _coerce_text_list(items, max_items=5)
+
+    if not items:
+        return _fallback_expertise_from_profile(profile)[:5]
+
+    return items
+
+def _generate_education(
+    *,
+    education: List[Dict[str, Any]],
+    jd: str,
+    company: str,
+    job_title: str,
+    model: str,
+) -> List[Dict[str, Any]]:
+    if not education:
+        return []
+
+    prompt = f"""
+You are an expert ATS resume writer.
+
+Return ONLY valid JSON.
+
+Task:
+Rewrite the education section for a CV.
+
+Rules:
+- Return only a JSON array.
+- No explanation.
+- No markdown.
+- No text before or after the JSON.
+- Preserve degree, university, start, end, and dates from the input.
+- Keep entries concise and ATS-friendly.
+- Do not invent degrees, universities, dates, honors, coursework, city, or country.
+
+Required format:
+[
+  {{
+    "degree": "...",
+    "university": "...",
+    "city": "...",
+    "country": "...",
+    "start": "...",
+    "end": "...",
+    "dates": "...",
+    "coursework": "...",
+    "honors": "..."
+  }}
+]
+
+TARGET JOB:
+Company: {company}
+Title: {job_title}
+Description:
+{jd}
+
+EDUCATION INPUT:
+{json.dumps(education, ensure_ascii=False)}
+""".strip()
+
+    text = ollama_generate(model=model, prompt=prompt, timeout=180)
+    items = _parse_json_list_from_text(text)
+    items = _normalize_education_list(_as_list_of_dicts(items))[:4]
+
+    if not items:
+        return _normalize_education_list(education)[:4]
+
+    return items
+
+def _generate_certifications(
+    *,
+    certifications: List[Dict[str, Any]],
+    jd: str,
+    company: str,
+    job_title: str,
+    model: str,
+) -> List[Dict[str, str]]:
+    if not certifications:
+        return []
+
+    prompt = f"""
+You are an expert ATS resume writer.
+
+Return ONLY valid JSON.
+
+Task:
+Rewrite the certifications section for a CV.
+
+Rules:
+- Return only a JSON array.
+- No explanation.
+- No markdown.
+- No text before or after the JSON.
+- Preserve title, issuer, start, end, and dates from the input.
+- Keep entries concise and ATS-friendly.
+- Do not invent certification names, issuers, or dates.
+
+Required format:
+[
+  {{
     "title": "...",
-    "email": "...",
-    "phone": "...",
-    "location": "...",
-    "linkedin": "...",
-    "github": "...",
-    "portfolio": "..."
-  }},
-  "summary": "string around 55-80 words",
-  "areas_of_expertise": ["max 5 items"],
-  "skills": {{
-    "Programming and Data": ["...", "..."],
-    "Machine Learning and AI": ["...", "..."],
-    "Data Engineering and Cloud": ["...", "..."],
-    "Data Processing": ["...", "..."],
-    "Automation": ["...", "..."],
-    "Tools and Libraries": ["...", "..."],
-    "Soft Skills": ["...", "..."],
-    "Domain Strengths": ["...", "..."]
-  }},
-  "experience": [
-    {{
-      "role": "...",
-      "company": "...",
-      "dates": "MMM YYYY – MMM YYYY|Present",
-      "bullets": ["...", "...", "..."]
-    }}
-  ],
-  "projects": [
-    {{
-      "name": "...",
-      "tech": "...",
-      "dates": "MMM YYYY – MMM YYYY|Present",
-      "bullets": ["...", "..."]
-    }}
-  ],
-  "education": [
-    {{
-      "degree": "...",
-      "university": "...",
-      "city": "...",
-      "country": "...",
-      "start": "MMM YYYY",
-      "end": "MMM YYYY",
-      "dates": "MMM YYYY – MMM YYYY",
-      "coursework": "...",
-      "honors": "..."
-    }}
-  ],
-  "certifications": [
-    {{
-      "title": "...",
-      "issuer": "...",
-      "dates": "MMM YYYY – MMM YYYY"
-    }}
-  ],
-  "internships": [
-    {{
-      "role": "...",
-      "company": "...",
-      "dates": "MMM YYYY – MMM YYYY|Present",
-      "bullets": ["...", "..."]
-    }}
-  ]
+    "issuer": "...",
+    "start": "...",
+    "end": "...",
+    "dates": "..."
+  }}
+]
+
+TARGET JOB:
+Company: {company}
+Title: {job_title}
+Description:
+{jd}
+
+CERTIFICATIONS INPUT:
+{json.dumps(certifications, ensure_ascii=False)}
+""".strip()
+
+    text = ollama_generate(model=model, prompt=prompt, timeout=180)
+    items = _parse_json_list_from_text(text)
+    items = _normalize_output_certifications(items)[:6]
+
+    if not items:
+        return _normalize_output_certifications(certifications)[:6]
+
+    return items
+
+def _generate_internships(
+    *,
+    internships: List[Dict[str, Any]],
+    jd: str,
+    company: str,
+    job_title: str,
+    model: str,
+) -> List[Dict[str, Any]]:
+    if not internships:
+        return []
+
+    prompt = f"""
+You are an expert ATS resume writer.
+
+Return ONLY valid JSON.
+
+Task:
+Rewrite the internship entries for a CV.
+
+Rules:
+- Return only a JSON array.
+- No explanation.
+- No markdown.
+- No text before or after the JSON.
+- Preserve role, company, start, end, and dates from the input.
+- Write 1 to 3 bullet points per internship.
+- Keep each bullet concise and achievement-focused.
+- Include relevant keywords only when supported by the input.
+- Do not invent employers, dates, tools, metrics, or achievements.
+
+Required format:
+[
+  {{
+    "role": "...",
+    "company": "...",
+    "start": "...",
+    "end": "...",
+    "dates": "...",
+    "bullets": ["...", "..."]
+  }}
+]
+
+TARGET JOB:
+Company: {company}
+Title: {job_title}
+Description:
+{jd}
+
+INTERNSHIPS INPUT:
+{json.dumps(internships, ensure_ascii=False)}
+""".strip()
+
+    text = ollama_generate(model=model, prompt=prompt, timeout=180)
+    items = _parse_json_list_from_text(text)
+    items = _normalize_internships_list(_as_list_of_dicts(items))[:3]
+
+    if not items:
+        return _normalize_internships_list(internships)[:3]
+
+    return items
+
+def _generate_skills(
+    *,
+    profile: Dict[str, Any],
+    jd: str,
+    company: str,
+    job_title: str,
+    model: str,
+) -> Dict[str, List[str]]:
+    prompt = f"""
+You are an expert ATS resume writer.
+
+Return ONLY valid JSON.
+
+Task:
+Group the candidate's relevant skills into the exact categories below.
+
+Rules:
+- Return only a JSON object.
+- No explanation.
+- No markdown.
+- No text before or after the JSON.
+- Use only evidence from the master profile.
+- Use the job description only for prioritization.
+- Do not invent skills.
+
+Required categories:
+- Programming and Data
+- Machine Learning and AI
+- Data Engineering and Cloud
+- Data Processing
+- Automation
+- Tools and Libraries
+- Soft Skills
+- Domain Strengths
+
+Example format:
+{{
+  "Programming and Data": ["Python", "SQL"],
+  "Machine Learning and AI": ["XGBoost", "PyTorch"],
+  "Data Engineering and Cloud": ["Azure", "Databricks"],
+  "Data Processing": ["ETL", "Data Cleaning"],
+  "Automation": ["Web Scraping", "Workflow Automation"],
+  "Tools and Libraries": ["Pandas", "Scikit-learn"],
+  "Soft Skills": ["Communication", "Problem Solving"],
+  "Domain Strengths": ["Compliance Monitoring", "AI Systems"]
 }}
 
 TARGET JOB:
@@ -251,31 +524,197 @@ Title: {job_title}
 Description:
 {jd}
 
-MASTER PROFILE JSON:
+MASTER PROFILE:
 {json.dumps(profile, ensure_ascii=False)}
 """.strip()
 
+    text = ollama_generate(model=model, prompt=prompt, timeout=180)
+    obj = _parse_json_dict_from_text(text)
+    skills = _coerce_skills(obj)
 
-def _parse_json_from_text(text: str) -> Optional[Dict[str, Any]]:
+    # fallback if model returns empty
+    if not any(skills.values()):
+        profile_skills = profile.get("skills", {})
+        if isinstance(profile_skills, dict):
+            return _coerce_skills(profile_skills)
+
+    return skills
+
+def _generate_experience(
+    *,
+    selected_experience: List[Dict[str, Any]],
+    jd: str,
+    company: str,
+    job_title: str,
+    model: str,
+) -> List[Dict[str, Any]]:
+    if not selected_experience:
+        return []
+
+    prompt = f"""
+You are an expert ATS resume writer.
+
+Return ONLY valid JSON.
+
+Task:
+Rewrite the selected work experience entries for a CV.
+
+Rules:
+- Return only a JSON array.
+- No explanation.
+- No markdown.
+- No text before or after the JSON.
+- Preserve role, company, start, end, and dates from the input.
+- Write 2 to 4 bullet points per experience.
+- Keep each bullet under 20 words.
+- Start each bullet with a strong action verb.
+- Focus on measurable impact, achievements, and business value where supported.
+- Include job-relevant keywords when supported by the source data.
+- Do not invent metrics, tools, achievements, dates, employers, or responsibilities.
+
+Required format:
+[
+  {{
+    "role": "...",
+    "company": "...",
+    "start": "...",
+    "end": "...",
+    "dates": "...",
+    "bullets": ["...", "...", "..."]
+  }}
+]
+
+TARGET JOB:
+Company: {company}
+Title: {job_title}
+Description:
+{jd}
+
+SELECTED EXPERIENCE INPUT:
+{json.dumps(selected_experience, ensure_ascii=False)}
+""".strip()
+
+    text = ollama_generate(model=model, prompt=prompt, timeout=240)
+    items = _parse_json_list_from_text(text)
+    items = _normalize_experience_list(_as_list_of_dicts(items))[:3]
+
+    if not items:
+        return _normalize_experience_list(selected_experience)[:3]
+
+    return items
+
+def _generate_projects(
+    *,
+    selected_projects: List[Dict[str, Any]],
+    jd: str,
+    company: str,
+    job_title: str,
+    model: str,
+) -> List[Dict[str, Any]]:
+    if not selected_projects:
+        return []
+
+    prompt = f"""
+You are an expert ATS resume writer.
+
+Return ONLY valid JSON.
+
+Task:
+Rewrite the selected project entries for a CV.
+
+Rules:
+- Return only a JSON array.
+- No explanation.
+- No markdown.
+- No text before or after the JSON.
+- Preserve project name, technologies, start, end, and dates from the input.
+- Write 1 to 3 bullet points per project.
+- Keep each bullet concise and achievement-focused.
+- Include job-relevant keywords when supported by the source data.
+- Do not invent tools, metrics, dates, or achievements.
+
+Required format:
+[
+  {{
+    "name": "...",
+    "tech": "...",
+    "start": "...",
+    "end": "...",
+    "dates": "...",
+    "bullets": ["...", "..."]
+  }}
+]
+
+TARGET JOB:
+Company: {company}
+Title: {job_title}
+Description:
+{jd}
+
+SELECTED PROJECTS INPUT:
+{json.dumps(selected_projects, ensure_ascii=False)}
+""".strip()
+
+    text = ollama_generate(model=model, prompt=prompt, timeout=240)
+    items = _parse_json_list_from_text(text)
+    items = _normalize_projects_list(_as_list_of_dicts(items))[:3]
+
+    if not items:
+        return _normalize_projects_list(selected_projects)[:3]
+
+    return items
+
+def _parse_json_dict_from_text(text: str) -> Dict[str, Any]:
     if not text:
-        return None
+        return {}
+
+    text = text.strip()
 
     try:
         obj = json.loads(text)
-        if isinstance(obj, dict):
-            return obj
+        return obj if isinstance(obj, dict) else {}
     except Exception:
         pass
 
     m = re.search(r"\{.*\}", text, flags=re.DOTALL)
     if not m:
-        return None
+        return {}
 
     try:
         obj = json.loads(m.group(0))
-        return obj if isinstance(obj, dict) else None
+        return obj if isinstance(obj, dict) else {}
     except Exception:
-        return None
+        return {}
+    
+def _parse_json_list_from_text(text: str) -> List[Any]:
+    if not text:
+        return []
+
+    text = text.strip()
+
+    try:
+        obj = json.loads(text)
+        return obj if isinstance(obj, list) else []
+    except Exception:
+        pass
+
+    m = re.search(r"\[.*\]", text, flags=re.DOTALL)
+    if not m:
+        return []
+
+    try:
+        obj = json.loads(m.group(0))
+        return obj if isinstance(obj, list) else []
+    except Exception:
+        return []
+    
+def _parse_text_response(text: str) -> str:
+    if not text:
+        return ""
+    text = str(text).strip()
+    text = re.sub(r"^```[a-zA-Z]*\s*", "", text)
+    text = re.sub(r"\s*```$", "", text)
+    return text.strip()
 
 
 def _ensure_dates_on_items(items: List[Dict[str, Any]], keys: Tuple[str, str], out_key: str) -> None:
@@ -298,15 +737,79 @@ def _normalize_certifications(x: Any) -> List[Dict[str, str]]:
             if isinstance(it, dict):
                 title = str(it.get("title") or it.get("name") or "").strip()
                 issuer = str(it.get("issuer") or "").strip()
+
+                start = str(it.get("start") or "").strip()
+                end = str(it.get("end") or "").strip()
+
                 dates = str(it.get("dates") or "").strip()
                 if not dates:
-                    dates = _join_dates(str(it.get("start") or "").strip(), str(it.get("end") or "").strip())
+                    dates = _join_dates(start, end)
 
-                if title or issuer or dates:
+                if title or issuer or start or end or dates:
                     out.append(
                         {
                             "title": title,
                             "issuer": issuer,
+                            "start": start,
+                            "end": end,
+                            "dates": dates,
+                        }
+                    )
+
+            elif isinstance(it, str):
+                s = it.strip()
+                if s:
+                    out.append(
+                        {
+                            "title": s,
+                            "issuer": "",
+                            "start": "",
+                            "end": "",
+                            "dates": "",
+                        }
+                    )
+
+    elif isinstance(x, dict):
+        return _normalize_certifications([x])
+
+    else:
+        s = str(x).strip()
+        if s:
+            out.append(
+                {
+                    "title": s,
+                    "issuer": "",
+                    "start": "",
+                    "end": "",
+                    "dates": "",
+                }
+            )
+
+    return out[:50]
+
+def _normalize_output_certifications(x: Any) -> List[Dict[str, str]]:
+    out: List[Dict[str, str]] = []
+
+    if isinstance(x, list):
+        for it in x:
+            if isinstance(it, dict):
+                title = str(it.get("title") or it.get("name") or "").strip()
+                issuer = str(it.get("issuer") or "").strip()
+
+                start = str(it.get("start") or "").strip()
+                end = str(it.get("end") or "").strip()
+
+                dates = str(it.get("dates") or "").strip()
+                if not dates:
+                    dates = _join_dates(start, end)
+
+                if title or issuer or start or end or dates:
+                    out.append(
+                        {
+                            "title": title,
+                            "issuer": issuer,
+                            "start": start,
+                            "end": end,
                             "dates": dates,
                         }
                     )
@@ -317,51 +820,29 @@ def _normalize_certifications(x: Any) -> List[Dict[str, str]]:
                         {
                             "title": s,
                             "issuer": "",
+                            "start": "",
+                            "end": "",
                             "dates": "",
                         }
                     )
-    elif isinstance(x, dict):
-        return _normalize_certifications([x])
-    else:
-        s = str(x).strip()
-        if s:
-            out.append({"title": s, "issuer": "", "dates": ""})
 
-    return out[:50]
-
-
-def _normalize_output_certifications(x: Any) -> List[Dict[str, str]]:
-    out: List[Dict[str, str]] = []
-
-    if isinstance(x, list):
-        for it in x:
-            if isinstance(it, dict):
-                title = str(it.get("title") or it.get("name") or "").strip()
-                issuer = str(it.get("issuer") or "").strip()
-                dates = str(it.get("dates") or "").strip()
-                if not dates:
-                    dates = _join_dates(str(it.get("start") or "").strip(), str(it.get("end") or "").strip())
-
-                if title or issuer or dates:
-                    out.append({"title": title, "issuer": issuer, "dates": dates})
-            elif isinstance(it, str):
-                s = it.strip()
-                if s:
-                    out.append({"title": s, "issuer": "", "dates": ""})
     elif isinstance(x, dict):
         out = _normalize_output_certifications([x])
 
     return out
-
 
 def _normalize_experience_list(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for e in items:
         role = str(e.get("role") or "").strip()
         company = str(e.get("company") or "").strip()
+
+        start = str(e.get("start") or "").strip()
+        end = str(e.get("end") or "").strip()
+
         dates = str(e.get("dates") or "").strip()
         if not dates:
-            dates = _join_dates(str(e.get("start") or "").strip(), str(e.get("end") or "").strip())
+            dates = _join_dates(start, end)
 
         bullets = _as_list(e.get("bullets"))
         if not bullets and isinstance(e.get("description"), str):
@@ -369,26 +850,31 @@ def _normalize_experience_list(items: List[Dict[str, Any]]) -> List[Dict[str, An
 
         bullets = [str(b).strip() for b in bullets if str(b).strip()][:3]
 
-        if role or company or dates or bullets:
+        if role or company or start or end or dates or bullets:
             out.append(
                 {
                     "role": role,
                     "company": company,
+                    "start": start,
+                    "end": end,
                     "dates": dates,
                     "bullets": bullets,
                 }
             )
     return out
 
-
 def _normalize_projects_list(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for p in items:
         name = str(p.get("name") or "").strip()
         tech = str(p.get("tech") or "").strip()
+
+        start = str(p.get("start") or "").strip()
+        end = str(p.get("end") or "").strip()
+
         dates = str(p.get("dates") or "").strip()
         if not dates:
-            dates = _join_dates(str(p.get("start") or "").strip(), str(p.get("end") or "").strip())
+            dates = _join_dates(start, end)
 
         bullets = _as_list(p.get("bullets"))
         if not bullets and isinstance(p.get("description"), str):
@@ -396,26 +882,31 @@ def _normalize_projects_list(items: List[Dict[str, Any]]) -> List[Dict[str, Any]
 
         bullets = [str(b).strip() for b in bullets if str(b).strip()][:2]
 
-        if name or tech or dates or bullets:
+        if name or tech or start or end or dates or bullets:
             out.append(
                 {
                     "name": name,
                     "tech": tech,
+                    "start": start,
+                    "end": end,
                     "dates": dates,
                     "bullets": bullets,
                 }
             )
     return out
 
-
 def _normalize_internships_list(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for it in items:
         role = str(it.get("role") or "").strip()
         company = str(it.get("company") or "").strip()
+
+        start = str(it.get("start") or "").strip()
+        end = str(it.get("end") or "").strip()
+
         dates = str(it.get("dates") or "").strip()
         if not dates:
-            dates = _join_dates(str(it.get("start") or "").strip(), str(it.get("end") or "").strip())
+            dates = _join_dates(start, end)
 
         bullets = _as_list(it.get("bullets"))
         if not bullets and isinstance(it.get("description"), str):
@@ -423,11 +914,13 @@ def _normalize_internships_list(items: List[Dict[str, Any]]) -> List[Dict[str, A
 
         bullets = [str(b).strip() for b in bullets if str(b).strip()][:3]
 
-        if role or company or dates or bullets:
+        if role or company or start or end or dates or bullets:
             out.append(
                 {
                     "role": role,
                     "company": company,
+                    "start": start,
+                    "end": end,
                     "dates": dates,
                     "bullets": bullets,
                 }
@@ -463,28 +956,6 @@ def _normalize_education_list(items: List[Dict[str, Any]]) -> List[Dict[str, Any
                 }
             )
     return out
-
-
-def _fallback_cv(
-    header: Dict[str, Any],
-    profile: Dict[str, Any],
-    sel_exp: List[Dict[str, Any]],
-    sel_proj: List[Dict[str, Any]],
-    education: List[Dict[str, Any]],
-    internships: List[Dict[str, Any]],
-    certs: List[Dict[str, str]],
-) -> Dict[str, Any]:
-    return {
-        "header": header,
-        "summary": "Targeted candidate with relevant experience aligned to the role and demonstrated strengths across key responsibilities from the master profile.",
-        "areas_of_expertise": _fallback_expertise_from_profile(profile)[:5],
-        "skills": {cat: [] for cat in SKILL_CATS},
-        "experience": _normalize_experience_list(sel_exp[:3]),
-        "projects": _normalize_projects_list(sel_proj[:3]),
-        "certifications": certs[:6],
-        "internships": _normalize_internships_list(internships[:3]),
-        "education": _normalize_education_list(education[:4]),
-    }
 
 
 def _top_k_by_overlap(items: List[Dict[str, Any]], jd: str, k: int) -> List[Dict[str, Any]]:

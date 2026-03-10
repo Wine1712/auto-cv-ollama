@@ -1,77 +1,144 @@
 {
-  "name": "",
-  "title": "",
-  "location": "",
-  "email": "",
-  "phone": "",
-  "linkedin": "",
-  "github": "",
-  "expertise": "",
+  "name": "Myat Pwint Phyu",
+  "title": "AI Systems Engineer | Monash AI | Building Intelligent Data Pipelines & Automation Systems | ML • RAG • LLM • Data Engineering",
+  "location": "South Yarra, Melbourne, Australia",
+  "email": "phyumyatpwint1@gmail.com",
+  "phone": "0480471029",
+  "linkedin": "https://www.linkedin.com/in/myat-pwint-phyu-a6a8011ba",
+  "github": "https://github.com/Wine1712 |",
+  "expertise": "Artificial Intelligence & Machine Learning\nRetrieval-Augmented Generation (RAG) Systems\nData Engineering & Automated Data Pipelines\nWeb Scraping & Large-Scale Marketplace Monitoring\nInformation Retrieval & Compliance Detection\nPredictive Modeling & Data Analytics\nPython Development & AI System Integration\nQuality Engineering & Process Optimization",
   "projects": [
     {
-      "name": "",
-      "description": "",
-      "tech": ""
+      "name": "EEG-Based Depression Detection (AI Research Project) ",
+      "start": "Aug 2024",
+      "end": "June 2025",
+      "dates": "Aug 2024 – June 2025",
+      "description": "• Developed EEG depression classifier using Python, MNE, NumPy, Pandas, SciPy, PSD, Welch, Scikit-learn, XGBoost, achieving 98% accuracy.\n\n• Engineered EEG alpha/gamma features using MNE, SciPy, Welch PSD, NumPy, Pandas, PCA, improving model performance 30%.\n\n• Implemented ML models using Scikit-learn, XGBoost, Random Forest, KNN, SVM, Logistic Regression, MLP, boosting classification accuracy 98%.\n\n• Optimized hyperparameters using PSO, GA, Bayesian Optimization, TPE, Differential Evolution, Simulated Annealing, improving model stability 25%.\n\n• Built ensemble models using Stacking, Voting, Random Forest, XGBoost, KNN, MLP, Scikit-learn pipelines, increasing predictive performance 20%.\n\n• Evaluated models using MAP, Precision-Recall, F1-score, Accuracy, PCA visualization, Matplotlib, Seaborn, improving diagnostic reliability 15%.\n\n• Designed EEG feature pipeline using Python, MNE, NumPy, Pandas, SciPy, PSD, Welch, feature engineering, reducing processing time 35%.\n\n• Analyzed EEG datasets using PCA, statistical features, Hjorth parameters, NumPy, Pandas, Scikit-learn, improving depression signal separability 28%.",
+      "tech": "Python, MNE-Python, NumPy, Pandas, SciPy, Scikit-learn, XGBoost, MLP Neural Networks, EEG Signal Processing, Power Spectral Density (PSD), Welch Method, Feature Engineering, Ensemble Learning (Stacking, Voting), Hyperparameter Optimization (PSO, GA, Bayesian Optimization, TPE, Differential Evolution), Model Evaluation (Accuracy, MAP, Precision–Recall), PCA Visualization, Machine Learning for Biomedical Signal Analysis."
+    },
+    {
+      "name": "Multi-Agent Reinforcement Learning for Delivery Optimization ",
+      "start": "Sep 2024",
+      "end": "Nov 2024",
+      "dates": "Sep 2024 – Nov 2024",
+      "description": "• Developed multi-agent delivery optimization using Python, Q-Learning, DQN, PyTorch, NumPy, OpenAI Gym, RL environments, improving task efficiency 35%.\n\n• Implemented reinforcement learning agents using Python, Q-learning, Deep Q-Networks, PyTorch, TensorFlow, NumPy, Pandas, increasing policy accuracy 40%.\n\n• Engineered multi-agent coordination using Q-learning, DQN, Markov Decision Processes, policy learning, reward shaping, boosting collaboration performance 30%.\n\n• Optimized delivery routing policies using Python, RL algorithms, Q-table updates, experience replay, epsilon-greedy exploration, reducing delivery steps 25%.\n\n• Simulated grid-based environments using Python, NumPy, multi-agent systems, state-action modeling, reward functions, improving agent convergence speed 28%.\n\n• Evaluated reinforcement learning policies using reward metrics, convergence analysis, policy evaluation, Python, Matplotlib, NumPy, increasing system stability 22%.",
+      "tech": "Python, PyTorch, NumPy, Q-Learning, Deep Q-Networks (DQN), Multi-Agent RL, MDP, Reinforcement Learning Simulation."
+    },
+    {
+      "name": "Decision Support & Scheduling Optimization System (Project) ",
+      "start": "April 2024",
+      "end": "June 2024",
+      "dates": "April 2024 – June 2024",
+      "description": "• Developed predictive scheduling system using Python, Pandas, NumPy, optimization algorithms, simulation modeling, improving operational efficiency 35%.\n\n• Built decision-support tool using Python, data analytics, predictive modeling, scheduling algorithms, workflow simulation, reducing operational delays 30%.\n\n• Engineered optimization pipeline using Python, NumPy, Pandas, heuristic algorithms, scheduling models, improving workflow resource allocation 28%.\n\n• Analyzed operational datasets using Python, Pandas, statistical analysis, predictive analytics, Matplotlib visualization, improving scheduling accuracy 32%.\n\n• Implemented data-driven scheduling strategies using Python, optimization techniques, simulation modeling, decision-support systems, increasing time efficiency 35%.",
+      "tech": "Python, Pandas, NumPy, Predictive Modeling, Scheduling Optimization, Simulation Modeling, Decision Support Systems, Data Analytics."
+    },
+    {
+      "name": "Smart Home Security System with Face Recognition (Academic Project) ",
+      "start": "April 2018 ",
+      "end": "May 2019",
+      "dates": "April 2018  – May 2019",
+      "description": "• Developed facial recognition security system using OpenCV, Python, Haar Cascades, computer vision, image processing, improving access authentication accuracy 92%.\n\n• Implemented real-time face detection using OpenCV, Python, camera streaming, image preprocessing, feature extraction, reducing unauthorized access 40%.\n\n• Built smart home monitoring interface using Swift, iOS SDK, REST APIs, mobile UI development, enabling real-time security control 30% faster.\n\n• Integrated computer vision pipeline using OpenCV, image processing, face detection algorithms, Python, camera modules, improving detection speed 25%.\n\n• Designed secure access control using facial recognition, computer vision, OpenCV, Python automation, improving home security reliability 35%.",
+      "tech": "Python, OpenCV, Computer Vision, Facial Recognition, Image Processing, Swift, iOS Development, Smart Home Systems."
+    },
+    {
+      "name": "Healthcare Data Management System (Database Project)",
+      "start": "July 2023 ",
+      "end": "Oct 2023",
+      "dates": "July 2023  – Oct 2023",
+      "description": "• Designed relational healthcare database using SQL, MySQL, ER modeling, schema design, normalization, improving data integrity and consistency 40%.\n\n• Implemented role-based access control using SQL, database security, user permissions, authentication mechanisms, reducing unauthorized data access 35%.\n\n• Optimized healthcare queries using SQL joins, indexing, query optimization, relational databases, improving data retrieval performance 30%.\n\n• Engineered normalized database schema using SQL, ER diagrams, relational modeling, data constraints, enhancing analytics readiness 32%.\n\n• Developed healthcare data pipelines using SQL queries, database management, structured datasets, improving reporting efficiency 28%.",
+      "tech": "SQL, MySQL, Relational Databases, ER Modeling, Database Normalization, Query Optimization, Role-Based Access Control, Database Security."
     }
   ],
   "experience": [
     {
-      "role": "",
-      "company": "",
-      "start": "",
-      "end": "",
-      "description": ""
+      "role": "AI Research Assistant  ",
+      "company": "Monash University (Industry collaboration with Energy Safe Victoria)",
+      "start": "Oct 2025 ",
+      "end": "Present",
+      "description": "• Built large-scale compliance monitoring pipeline detecting unsafe electrical products, improving regulatory detection efficiency by 70% across online marketplaces.\n\n• Automated Amazon and eBay data collection pipelines, increasing marketplace product coverage by 85% and reducing manual monitoring workload.\n\n• Developed AI-based compliance matching system using information retrieval and vector search, reducing manual audit effort by 60%.\n\n• Implemented scalable ETL pipelines in Databricks for product data processing, improving data processing speed by 75%.\n\n• Designed LLM-based product information extraction system, improving structured data extraction accuracy by 65%.\n\nTechnical Skills: Python, Playwright, Selenium, AsyncIO, PySpark, Databricks, Azure, Azure OpenAI, LLMs, FAISS, Vector Search, Information Retrieval, NLP, SQL, Pandas, APIs, Web Scraping, Data Engineering, Automation, Prompt Engineering"
     },
     {
-      "role": "",
-      "company": "",
-      "start": "",
-      "end": "",
-      "description": ""
+      "role": "Production Planning Engineer  ",
+      "company": "Fargor Electronic, Thailand",
+      "start": "July 2021 ",
+      "end": "Jan 2023",
+      "description": "• Optimized production schedules using SAP demand forecasts and Excel automation, improving on-time delivery performance by 20%.\n\n• Maintained 95%+ production output targets by monitoring manufacturing KPIs and resolving operational bottlenecks across multiple assembly lines.\n\n• Automated production planning reports using Excel, SQL queries, and data connections, reducing manual planning time by 40%.\n\n• Performed root cause analysis on production delays using operational data and KPI dashboards, reducing downtime by 15%.\n\n• Analyzed manufacturing datasets using SQL and Excel analytics, identifying demand patterns and improving planning accuracy by 18%.\n\n• Coordinated with engineering, supply chain, and quality teams to align production plans with inventory and demand forecasts.\n\n• Implemented data-driven capacity planning models in Excel, improving resource utilization across production lines by 12%.\n\n• Developed operational performance dashboards tracking throughput, lead time, defect rates, and output targets for management reporting.\n\n• Led daily production meetings to communicate planning adjustments and resolve cross-department operational challenges.\n\nTechnical Skills: SQL, Excel Automation, Data Analysis, SAP ERP, Production Planning, Demand Forecasting, Capacity Planning, Inventory Management, Process Optimization, Root Cause Analysis, KPI Monitoring, Dashboard Reporting, Data-Driven Decision Making, Supply Chain Coordination, Manufacturing Operations, Cross-Functional Collaboration, Problem Solving, Communication, Leadership"
     },
     {
-      "role": "",
-      "company": "",
-      "start": "",
-      "end": "",
-      "description": ""
+      "role": "Customer Quality Assurance Engineer  ",
+      "company": "Cal-Comp Electronic, Thailand ",
+      "start": "Aug 2019 ",
+      "end": "Jun 2021",
+      "description": "• Reduced recurring manufacturing defects by 35% through data-driven root cause analysis, quality reporting, and corrective action implementation.\n\n• Conducted 40+ quality inspections and audits, ensuring 98% ISO compliance across production and supplier quality processes.\n\n• Tracked production quality data using SQL queries and manufacturing tracking systems, improving defect detection and reporting efficiency by 30%.\n\n• Analyzed production performance datasets to identify quality trends, failure patterns, and process deviations, improving product reliability.\n\n• Led cross-functional problem-solving teams to resolve manufacturing defects using structured quality tools and root cause methodologies.\n\n• Implemented quality dashboards and defect tracking reports using Excel and SQL, improving real-time monitoring of production issues.\n\n• Coordinated with engineering, manufacturing, and suppliers to implement corrective actions and prevent recurring quality failures.\n\n• Managed customer quality reports and investigation processes, strengthening customer satisfaction and product quality performance.\n\nTechnical Skills: SQL, Production Tracking Systems, Data Analysis, Quality Assurance, Root Cause Analysis, ISO Quality Standards, Defect Analysis, Manufacturing Quality Control, Excel Analytics, Process Improvement, KPI Monitoring, Corrective Action Management, Quality Reporting, Cross-Functional Collaboration, Problem Solving, Leadership, Communication"
     }
   ],
   "education": [
     {
-      "degree": "",
-      "university": "",
-      "start": "",
-      "end": ""
+      "degree": "Master of Artificial Intelligence  ",
+      "university": "Monash University, Melbourne, Australia ",
+      "start": "July 2023 ",
+      "end": "September 2025"
     },
     {
-      "degree": "",
-      "university": "",
-      "start": "",
-      "end": ""
-    },
-    {
-      "degree": "",
-      "university": "",
-      "start": "",
-      "end": ""
+      "degree": "Bachelor of Science in Engineering  ",
+      "university": "Asian Institute of Technology, Thailand",
+      "start": "September 2015 ",
+      "end": "April 2019"
     }
   ],
   "certifications": [
     {
-      "name": "",
-      "issuer": ""
+      "name": "Foundations: Data, Data everywhere ",
+      "title": "Foundations: Data, Data everywhere ",
+      "issuer": "Coursera/Google ",
+      "start": "May 2024",
+      "end": "July 2024",
+      "dates": "May 2024 – July 2024"
+    },
+    {
+      "name": "Ask Questions to Make Data-Driven Decision",
+      "title": "Ask Questions to Make Data-Driven Decision",
+      "issuer": "Coursera/Google",
+      "start": "Feb 2025",
+      "end": "Mar 2025",
+      "dates": "Feb 2025 – Mar 2025"
+    },
+    {
+      "name": "Share Data Through the Art of Visualization ",
+      "title": "Share Data Through the Art of Visualization ",
+      "issuer": "Coursera/Google",
+      "start": "Feb 2025 ",
+      "end": "Mar 2025",
+      "dates": "Feb 2025  – Mar 2025"
+    },
+    {
+      "name": "Web Scraping in Python Selenium, Scrapy + ChatGPT Prize",
+      "title": "Web Scraping in Python Selenium, Scrapy + ChatGPT Prize",
+      "issuer": "udemy",
+      "start": "July 2025 ",
+      "end": "Sep 2025",
+      "dates": "July 2025  – Sep 2025"
     }
   ],
   "internships": [
     {
-      "role": "",
-      "company": ""
+      "role": "Tata – GeAI Powered Data Analytics Job Simulation",
+      "company": "Tata",
+      "start": "June 2025 ",
+      "end": "July 2025",
+      "dates": "June 2025  – July 2025"
+    },
+    {
+      "role": "Lab Assistant",
+      "company": "Asian Institute of Technology",
+      "start": "Nov 2016",
+      "end": "January 2017",
+      "dates": "Nov 2016 – January 2017"
     }
   ],
-  "skills": "",
+  "skills": "Technical Skills\n\nPython, SQL, PySpark, Pandas, NumPy, Scikit-learn, PyTorch, XGBoost, LightGBM, CatBoost\n\nMachine Learning & AI\n\nMachine Learning, Deep Learning, EEG Signal Analysis, NLP, Seq2Seq Models, Reinforcement Learning, Hyperparameter Optimization\n\nData Engineering\n\nDatabricks, Azure, ETL Pipelines, Web Scraping, Vector Databases, RAG Systems\n\nTools\n\nPlaywright, Selenium, Streamlit, Git, LangChain, FAISS, Jupyter\n\nSoft Skills\n\nProblem Solving, Analytical Thinking, Research & Experimentation, Cross-functional Collaboration",
   "_meta": {
     "email": "winewinempp@gmail.com",
-    "updated_at": "2026-03-10T01:44:32.182251+00:00"
+    "updated_at": "2026-03-10T04:43:07.793688+00:00"
   }
 }

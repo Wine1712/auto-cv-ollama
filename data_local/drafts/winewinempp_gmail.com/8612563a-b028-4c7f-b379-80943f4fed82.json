@@ -1,0 +1,222 @@
+{
+  "draft_id": "8612563a-b028-4c7f-b379-80943f4fed82",
+  "draft_name": "Myat_Pwint_Phyu_Junior_Software_Engineer_Jonas_Software_Australia_Mar_2026_Ver1.0",
+  "company": "Jonas Software Australia",
+  "job_title": "Junior Software Engineer",
+  "job_description": "About Us:\n\nThe Jonas Software Group of Companies acquires, manages, and builds industry-specific software companies globally. With over 100+ acquired companies and 2,500+ employees globally, we have long realized that our greatest asset is our employee base.\n\nOnTap Data is a Melbourne-based technology company powering smarter decisions for the Australian liquor and retail industry. With over 25 years of experience, we build purpose-built software tools that help suppliers, retailers, and wholesalers aggregate, report on, and act on their sales data. Our clients include some of Australia’s largest liquor brands and retail groups. We’re a small, high-impact team where your work genuinely matters.\n\n\n\nAbout the role: \n\nOnTap Data is seeking a curious, self‑driven Junior Software Engineer (Data/AI) to join our team and play a hands‑on role in building, improving, and modernising the technology that underpins our data products. This role involves working across our stack, getting stuck into real problems, and helping shape how we evolve our platforms. If you enjoy working with data, pick up new technologies with ease, and thrive in environments that empower you to work independently, we want to hear from you!\n\n\n\nKey Responsibilities:\n\nSearch & Analytics Development\n• Build and optimise Elasticsearch-based search and analytics features.\n• Improve performance and reliability of reporting functionality.\n\nModernising Legacy Systems\n• Migrate Microsoft Access–based systems into modern, scalable solutions.\n\nTech Stack Evolution\n• Contribute to the ongoing modernisation of applications, infrastructure, and data pipelines.\n\nData Processing & Integration\n• Clean, transform, and integrate large, messy datasets from multiple sources.\n• Make real‑world data accurate, usable, and reliable.\n\nEnd‑to‑End Development\n• Design, build, test, and deploy features across the full stack.\n\nTeamwork & Stakeholder Engagement\n• Collaborate with a small development team.\n• Work directly with internal stakeholders to understand requirements.\n\n\nSkills, Experience and Qualifications Required:\n\n1–2 years of professional software development experience.\n Genuine interest in data — whether querying databases, writing simple ETL processes, or building search functionality.\nInterest in AI‑driven development practices and a willingness to use AI tools and workflows (e.g., BMAD) to build software more effectively.\nFamiliarity with relational databases and SQL; bonus if you’ve worked with Microsoft Access or legacy systems.\nWillingness to learn Elasticsearch or experience with similar search/analytics technologies.\n Curious, self‑driven, and comfortable investigating problems, reading documentation, and learning independently.\nAble to work autonomously and manage your own work without daily oversight.\n Strong attention to detail, analytical thinking, and clear communication skills.\nThe following are advantageous but not required:\n\n Exposure to languages such as Python, C#, .NET, JavaScript, PHP, Go, or VBA.\n Experience with cloud platforms, containerisation, APIs, BI tools, or third‑party integrations.\nA relevant degree or equivalent practical experience.",
+  "cv": {
+    "header": {
+      "name": "Myat Pwint Phyu",
+      "title": "AI Systems Engineer | Monash AI | Building Intelligent Data Pipelines & Automation Systems | ML • RAG • LLM • Data Engineering",
+      "email": "phyumyatpwint1@gmail.com",
+      "phone": "0480471029",
+      "location": "South Yarra, Melbourne, Australia",
+      "linkedin": "https://www.linkedin.com/in/myat-pwint-phyu-a6a8011ba",
+      "github": "https://github.com/Wine1712 |",
+      "portfolio": ""
+    },
+    "summary": "Based on the provided data, here are some key insights about the individual: **Education:** * Master of Artificial Intelligence, Monash University, Melbourne, Australia (July 2023 - September 2025) * Bachelor of Science in Engineering, Asian Institute of Technology, Thailand (September 2015 - April 2019) **Work Experience:** * AI Research Assistant, Monash University (Industry collaboration with Energy Safe Victoria) (October 2025 - Present) * Production Planning Engineer, Fargor Electronic, Thailand (July 2021 - January 2023) * Customer Quality Assurance Engineer, Cal-Comp Electronic, Thailand (August 2019 - June 2021) **Projects:** * Smart…",
+    "areas_of_expertise": [
+      "Artificial Intelligence & Machine Learning",
+      "Retrieval-Augmented Generation (RAG) Systems",
+      "Data Engineering & Automated Data Pipelines",
+      "Web Scraping & Large-Scale Marketplace Monitoring",
+      "Information Retrieval & Compliance Detection"
+    ],
+    "skills": {
+      "Programming and Data": [
+        "Python",
+        "SQL",
+        "PySpark",
+        "Pandas",
+        "NumPy",
+        "Scikit-learn",
+        "PyTorch",
+        "XGBoost",
+        "LightGBM",
+        "CatBoost"
+      ],
+      "Machine Learning and AI": [
+        "Machine Learning",
+        "Deep Learning",
+        "EEG Signal Analysis",
+        "NLP",
+        "Seq2Seq Models",
+        "Reinforcement Learning",
+        "Hyperparameter Optimization"
+      ],
+      "Data Engineering and Cloud": [],
+      "Data Processing": [],
+      "Automation": [],
+      "Tools and Libraries": [],
+      "Soft Skills": [
+        "Problem Solving",
+        "Analytical Thinking",
+        "Research & Experimentation",
+        "Cross-functional Collaboration"
+      ],
+      "Domain Strengths": []
+    },
+    "experience": [
+      {
+        "role": "AI Research Assistant",
+        "company": "Monash University (Industry collaboration with Energy Safe Victoria)",
+        "start": "Oct 2025",
+        "end": "Present",
+        "dates": "Oct 2025 – Present",
+        "bullets": [
+          "Built large-scale compliance monitoring pipeline detecting unsafe electrical products, improving regulatory detection efficiency by 70% across online marketplaces.",
+          "Automated Amazon and eBay data collection pipelines, increasing marketplace product coverage by 85% and reducing manual monitoring workload.",
+          "Developed AI-based compliance matching system using information retrieval and vector search, reducing manual audit effort by 60%."
+        ]
+      },
+      {
+        "role": "Customer Quality Assurance Engineer",
+        "company": "Cal-Comp Electronic, Thailand",
+        "start": "Aug 2019",
+        "end": "Jun 2021",
+        "dates": "Aug 2019 – Jun 2021",
+        "bullets": [
+          "Reduced recurring manufacturing defects by 35% through data-driven root cause analysis, quality reporting, and corrective action implementation.",
+          "Conducted 40+ quality inspections and audits, ensuring 98% ISO compliance across production and supplier quality processes.",
+          "Tracked production quality data using SQL queries and manufacturing tracking systems, improving defect detection and reporting efficiency by 30%."
+        ]
+      },
+      {
+        "role": "Production Planning Engineer",
+        "company": "Fargor Electronic, Thailand",
+        "start": "July 2021",
+        "end": "Jan 2023",
+        "dates": "July 2021 – Jan 2023",
+        "bullets": [
+          "Optimized production schedules using SAP demand forecasts and Excel automation, improving on-time delivery performance by 20%.",
+          "Maintained 95%+ production output targets by monitoring manufacturing KPIs and resolving operational bottlenecks across multiple assembly lines.",
+          "Automated production planning reports using Excel, SQL queries, and data connections, reducing manual planning time by 40%."
+        ]
+      }
+    ],
+    "projects": [
+      {
+        "name": "Healthcare Data Management System (Database Project)",
+        "tech": "SQL, MySQL, Relational Databases, ER Modeling, Database Normalization, Query Optimization, Role-Based Access Control, Database Security",
+        "start": "July 2023",
+        "end": "Oct 2023",
+        "dates": "July 2023 – Oct 2023",
+        "bullets": [
+          "Designed relational healthcare database using SQL and MySQL, improving data integrity and consistency by 40%.",
+          "Implemented role-based access control using SQL and database security, reducing unauthorized data access by 35%."
+        ]
+      },
+      {
+        "name": "EEG-Based Depression Detection (AI Research Project)",
+        "tech": "Python, MNE-Python, NumPy, Pandas, SciPy, Scikit-learn, XGBoost, MLP Neural Networks, EEG Signal Processing, Power Spectral Density (PSD), Welch Method, Feature Engineering, Ensemble Learning (Stacking, Voting), Hyperparameter Optimization (PSO, GA, Bayesian Optimization, TPE, Differential Evolution), Model Evaluation (Accuracy, MAP, Precision–Recall), PCA Visualization, Machine Learning for Biomedical Signal Analysis",
+        "start": "Aug 2024",
+        "end": "June 2025",
+        "dates": "Aug 2024 – June 2025",
+        "bullets": [
+          "Developed EEG depression classifier using Python, achieving 98% accuracy.",
+          "Engineered EEG alpha/gamma features using MNE and SciPy, improving model performance by 30%."
+        ]
+      },
+      {
+        "name": "Smart Home Security System with Face Recognition (Academic Project)",
+        "tech": "Python, OpenCV, Computer Vision, Facial Recognition, Image Processing, Swift, iOS Development, Smart Home Systems",
+        "start": "April 2018",
+        "end": "May 2019",
+        "dates": "April 2018 – May 2019",
+        "bullets": [
+          "Developed facial recognition security system using OpenCV and Python, improving access authentication accuracy by 92%.",
+          "Implemented real-time face detection using OpenCV and Python, reducing unauthorized access by 40%."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "degree": "Master of Artificial Intelligence",
+        "university": "Monash University",
+        "city": "Melbourne",
+        "country": "Australia",
+        "start": "July 2023",
+        "end": "September 2025",
+        "dates": "July 2023 – September 2025",
+        "coursework": "",
+        "honors": ""
+      },
+      {
+        "degree": "Bachelor of Science in Engineering",
+        "university": "Asian Institute of Technology",
+        "city": "",
+        "country": "Thailand",
+        "start": "September 2015",
+        "end": "April 2019",
+        "dates": "September 2015 – April 2019",
+        "coursework": "",
+        "honors": ""
+      }
+    ],
+    "certifications": [
+      {
+        "title": "Foundations: Data, Data everywhere",
+        "issuer": "Coursera/Google",
+        "start": "May 2024",
+        "end": "July 2024",
+        "dates": "May 2024 – July 2024"
+      },
+      {
+        "title": "Ask Questions to Make Data-Driven Decision",
+        "issuer": "Coursera/Google",
+        "start": "Feb 2025",
+        "end": "Mar 2025",
+        "dates": "Feb 2025 – Mar 2025"
+      },
+      {
+        "title": "Share Data Through the Art of Visualization",
+        "issuer": "Coursera/Google",
+        "start": "Feb 2025",
+        "end": "Mar 2025",
+        "dates": "Feb 2025 – Mar 2025"
+      },
+      {
+        "title": "Web Scraping in Python Selenium, Scrapy + ChatGPT Prize",
+        "issuer": "Udemy",
+        "start": "July 2025",
+        "end": "Sep 2025",
+        "dates": "July 2025 – Sep 2025"
+      }
+    ],
+    "internships": [
+      {
+        "role": "Tata – GeAI Powered Data Analytics Job Simulation",
+        "company": "Tata",
+        "start": "June 2025",
+        "end": "July 2025",
+        "dates": "June 2025 – July 2025",
+        "bullets": [
+          "Developed data analytics skills through simulation-based job experience",
+          "Applied AI-powered tools and workflows to build software more effectively",
+          "Demonstrated ability to learn and adapt to new technologies"
+        ]
+      },
+      {
+        "role": "Lab Assistant",
+        "company": "Asian Institute of Technology",
+        "start": "Nov 2016",
+        "end": "January 2017",
+        "dates": "Nov 2016 – January 2017",
+        "bullets": [
+          "Assisted in laboratory experiments and data collection",
+          "Gained hands-on experience with laboratory equipment and tools",
+          "Developed basic analytical skills and attention to detail"
+        ]
+      }
+    ]
+  },
+  "_meta": {
+    "draft_id": "8612563a-b028-4c7f-b379-80943f4fed82",
+    "draft_name": "Myat_Pwint_Phyu_Junior_Software_Engineer_Jonas_Software_Australia_Mar_2026_Ver1.0",
+    "created_at": "2026-03-10T07:17:20.478039+00:00",
+    "email": "winewinempp@gmail.com",
+    "model": "llama3.1",
+    "updated_at": "2026-03-10T07:17:20.478766+00:00"
+  }
+}
