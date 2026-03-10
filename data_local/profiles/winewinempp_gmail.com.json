@@ -1,0 +1,77 @@
+{
+  "name": "",
+  "title": "",
+  "location": "",
+  "email": "",
+  "phone": "",
+  "linkedin": "",
+  "github": "",
+  "expertise": "",
+  "projects": [
+    {
+      "name": "",
+      "description": "",
+      "tech": ""
+    }
+  ],
+  "experience": [
+    {
+      "role": "",
+      "company": "",
+      "start": "",
+      "end": "",
+      "description": ""
+    },
+    {
+      "role": "",
+      "company": "",
+      "start": "",
+      "end": "",
+      "description": ""
+    },
+    {
+      "role": "",
+      "company": "",
+      "start": "",
+      "end": "",
+      "description": ""
+    }
+  ],
+  "education": [
+    {
+      "degree": "",
+      "university": "",
+      "start": "",
+      "end": ""
+    },
+    {
+      "degree": "",
+      "university": "",
+      "start": "",
+      "end": ""
+    },
+    {
+      "degree": "",
+      "university": "",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "certifications": [
+    {
+      "name": "",
+      "issuer": ""
+    }
+  ],
+  "internships": [
+    {
+      "role": "",
+      "company": ""
+    }
+  ],
+  "skills": "",
+  "_meta": {
+    "email": "winewinempp@gmail.com",
+    "updated_at": "2026-03-10T01:44:32.182251+00:00"
+  }
+}

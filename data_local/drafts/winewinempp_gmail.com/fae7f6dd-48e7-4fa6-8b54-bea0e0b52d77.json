@@ -1,0 +1,99 @@
+{
+  "draft_id": "fae7f6dd-48e7-4fa6-8b54-bea0e0b52d77",
+  "company": "",
+  "job_title": "",
+  "job_description": "About the candidate\nDemonstrated experience working with Large Language Model APIs, particularly OpenAI or Anthropic platforms.\nProficiency in Python programming with a focus on automation and workflow optimisation.\nHands-on experience with automation tools such as Zapier or Make for business process integration.\nKnowledge of Retrieval-Augmented Generation (RAG) systems and their practical applications.\nBackground in traditional coding practices to complement AI implementation work.\nExperience integrating AI solutions into CRM systems or similar business platforms.\nStrong understanding of data privacy and security requirements within Australian financial services.\nExceptional ability to translate technical AI concepts into clear, jargon-free language for non-technical stakeholders.\nSelf-directed learner who actively stays current with emerging AI models and technologies.\nProven problem-solving skills with the ability to identify business pain points and design technical solutions.\nExperience training or educating staff on new technology tools and systems.\nCollaborative mindset with the ability to work effectively across multiple business divisions.\nProactive and entrepreneurial approach to identifying AI opportunities within business operations.\nStrong attention to detail and commitment to delivering secure, compliant AI implementations.\nAdaptable communicator who can engage effectively with both technical and business-focused team members.",
+  "cv": {
+    "header": {
+      "name": "**Myat Pwint Phyu**",
+      "email": "phyumyatpwint1@gmail.com",
+      "phone": "0480471029",
+      "location": "Melbourne",
+      "linkedin": "https://www.linkedin.com/in/myat-pwint-phyu-a6a8011ba",
+      "github": "https://github.com/Wine1712",
+      "portfolio": ""
+    },
+    "summary": "Highly motivated and detail-oriented AI professional with expertise in Large Language Model APIs, Python programming, automation, and data privacy. Proven track record of delivering secure, compliant AI implementations and excellent communication skills.",
+    "skills": {
+      "Programming and Data": [
+        "Python",
+        "**Playwright**",
+        "**Selenium**"
+      ],
+      "Machine Learning and AI": [
+        "**Large Language Model APIs**",
+        "**Retrieval-Augmented Generation (RAG) systems**"
+      ],
+      "Data Engineering and Cloud": [
+        "**Databricks**",
+        "**Azure AI services**"
+      ],
+      "Data Processing": [
+        "Data Cleaning",
+        "Optimization"
+      ],
+      "Automation": [
+        "**Zapier**",
+        "**Make**"
+      ],
+      "Tools and Libraries": [
+        "Markdown",
+        "**Power BI**"
+      ],
+      "Soft Skills": [
+        "Excellent Communication",
+        "Problem-solving",
+        "Self-directed learning"
+      ],
+      "Domain Strengths": [
+        "Australian Financial Services",
+        "Data Privacy and Security"
+      ]
+    },
+    "experience": [
+      {
+        "role": "**AI Research Assistant**",
+        "company": "Monash University (Industry collaboration with Energy Safe Victoria)",
+        "dates": "Oct 2025 – Present",
+        "bullets": [
+          "Automated web data collection using **Playwright** and **Selenium**; cleaned and structured raw HTML/text via Markdown parsing before storing in **Databricks**",
+          "Applied **Azure AI services** for confidence scoring and compliance validation; integrated results into **Databricks** workflows",
+          "Developed **GenAI**-powered classification and compliance checks, with outputs visualised in **Power BI** dashboards for stakeholder use"
+        ]
+      }
+    ],
+    "projects": [
+      {
+        "name": "**EEG-Based Depression Detection (AI Research Project)**",
+        "tech": "**Data Clearning, Optimization system, Model performance measurement and data storytelling**",
+        "dates": "Aug 2024 – June 2025",
+        "bullets": [
+          "Developed ML and DL models using EEG alpha/gamma features for depression classification",
+          "Achieved 98% accuracy on controlled datasets, with attention to generalization and real-world applicability"
+        ]
+      }
+    ],
+    "certifications": [
+      "**Foundations: Data, Data everywhere** — Coursera/Google (May 2024 – July 2024)"
+    ],
+    "education": [
+      {
+        "line": "**Master of Artificial Intelligence** — Monash University — Melbourne, Australia (July 2023 – September 2025)",
+        "coursework": "Machine Learning, Deep Learning, Reinforcement Learning, Natural Language Processing, Optimization Systems"
+      },
+      {
+        "line": "**Bachelor of Science in Engineering** — Asian Institute of Technology — Bangkok, Thaniland (September 2015 – April 2019)",
+        "honors": "**Awarded Fellowship for academic excellence**",
+        "coursework": "Robotics, Sensor Systems, Control Systems, Embedded Systems"
+      }
+    ],
+    "internships": []
+  },
+  "_meta": {
+    "draft_id": "fae7f6dd-48e7-4fa6-8b54-bea0e0b52d77",
+    "created_at": "2026-03-05T08:15:58.944294+00:00",
+    "email": "winewinempp@gmail.com",
+    "model": "llama3.1",
+    "updated_at": "2026-03-05T08:15:58.944999+00:00"
+  }
+}
